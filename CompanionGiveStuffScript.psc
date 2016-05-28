@@ -4,6 +4,7 @@ ReferenceAlias Property Companion Auto Const mandatory
 FormList Property lootItemsCommon Auto Const
 FormList Property lootItemsRare Auto Const
 FormList Property lootItemsUncommon Auto Const
+Message Property CompanionGiveStuffMessage Auto
 ;ActorValue Property CarryWeight Auto Const
 
 float distanceCheck = 115.0
@@ -26,10 +27,14 @@ Event OnTimer(int timerID)
 			Debug.Trace("GetWidth = " + curObject.GetWidth())
 			Debug.Trace("GetHeight = " + curObject.GetHeight())
 			Debug.Trace("GetBaseObject = " + curObject.GetBaseObject())
+			Debug.Trace("GetMass = " + curObject.GetMass())
 
 			;curObjectLocal = curObject
 
 			Form BaseObject = curObject.getBaseObject()
+
+			Debug.Trace("GetGoldValue = " + BaseObject.GetGoldValue())
+			Debug.Trace("IsOverEncumbered = " + Companion.GetActorRef().IsOverEncumbered())
 
 			If ((BaseObject is Form && (lootItemsCommon.HasForm(BaseObject) || lootItemsRare.HasForm(BaseObject) || lootItemsUncommon.HasForm(BaseObject))) || BaseObject is Weapon || BaseObject is Armor)
 				Debug.Trace("is lootItem, Weapon or Armor")
@@ -73,6 +78,7 @@ Event OnDistanceLessThan(ObjectReference akObj1, ObjectReference akObj2, float a
 			;Debug.Trace("GetInventoryValue = " + akObj1.GetInventoryValue())
 			If akObj2.IsQuestItem() == false
 				akObj1.AddItem(akObj2)
+				CompanionGiveStuffMessage.Show()
 			EndIf
 		Else
 			Debug.Trace("Done waiting. Distance changed!. GetDistance = " + akObj1.GetDistance(akObj2))
@@ -91,3 +97,4 @@ Event ObjectReference.OnRelease(ObjectReference source)
 	StartTimer(1, 0)
 	;CancelTimer(1)
 EndEvent
+
